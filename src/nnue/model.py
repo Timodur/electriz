@@ -1,0 +1,1 @@
+# PyTorch ResNet (policy+value heads) for chess NNUE evaluation

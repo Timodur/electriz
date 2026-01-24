@@ -1,0 +1,61 @@
+# Electriz Chess Engine .gitignore (Linux/VSCode)
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# VSCode
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
+*.code-workspace
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# PyTorch/Chess CRITIQUE
+*.pt *.pth *.bin *.weights *.model *.nnue  # Modèles 1GB+
+data/processed/*.pt                       # Datasets 100GB
+data/raw/*.pgn.zst                        # Lichess DB
+data/raw/*.binpack                        # NNUE data
+selfplay-*.pgn                            # Selfplay outputs
+
+# Logs/Bench
+*.log
+bench.log
+arena.pgn
+
+# Linux/Env
+.venv/ venv/ env/
+.env
+.cache/
+.DS_Store
+*~
+
+# IDE
+.idea/
+*.swp *.swo
+
+# Big files
+data/raw/lichess_db_*.pgn.zst   # 100GB+ ignore

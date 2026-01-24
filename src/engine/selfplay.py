@@ -1,0 +1,1 @@
+# Génère PGN via MCTS vs self

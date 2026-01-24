@@ -1,0 +1,1 @@
+#Test de performance standard UCI pour mesurer vitesse moteur (nodes/sec)
