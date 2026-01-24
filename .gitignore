@@ -47,7 +47,9 @@ bench.log
 arena.pgn
 
 # Linux/Env
-.venv/ venv/ env/
+.venv/ 
+venv/ 
+env/
 .env
 .cache/
 .DS_Store
@@ -57,7 +59,7 @@ arena.pgn
 .idea/
 *.swp *.swo
 
-# Big files
+# Datasets
 data/raw/lichess_db_*.pgn.zst
 
 data/raw/*.pgn
