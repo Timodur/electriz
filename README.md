@@ -36,4 +36,6 @@ electriz/
 
 ## License
 
-This project is open source.
+This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2026, Timothé DURAND
