@@ -58,4 +58,9 @@ arena.pgn
 *.swp *.swo
 
 # Big files
-data/raw/lichess_db_*.pgn.zst   # 100GB+ ignore
+data/raw/lichess_db_*.pgn.zst
+
+data/raw/*.pgn
+
+data/raw/*.pgn.zst 
+data/raw/*.binpack
