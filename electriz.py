@@ -13,14 +13,16 @@ def jouer_partie():
     board = chess.Board()
     
     while not board.is_game_over():
-        
         coup = choisir_coup_aleatoire(board)
+
         print(coup)
         SVG(chess.svg.board(board=board, lastmove=coup))
         board.push(coup)
     
     print(f"\nRésultat : {board.result()}")
-    print(f"\nFEN finale : {board.fen()}")
-    SVG(chess.svg.board(board=board, size=400))
+    print(board.outcome())
+    print(board.fullmove_number)
+
+    print(board.unicode())
 if __name__ == "__main__":
     jouer_partie()

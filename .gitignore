@@ -76,3 +76,6 @@ data/raw/Hikaru_all.pgn      # ← VOS fichiers (si gros)
 data/raw/MagnusCarlsen_all.pgn
 data/raw/*.pgn            # Décommentez si petits
 Commandes
+
+# gameplay
+*.svg
