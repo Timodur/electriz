@@ -19,7 +19,7 @@ def jouer_partie():
         if board.turn == chess.WHITE:
         # Tour du joueur
             while True:
-                print(f"\nCoups légaux : {list(board.legal_moves)}")
+                print("coup légal(s) :", [str(m) for m in board.legal_moves])
                 user_input = input("Votre coup : ")
 
                     
