@@ -2,20 +2,7 @@ import chess
 import random
 import chess.svg
 from IPython.display import SVG
-
-def choisir_coup_simple(board):
-    coups_legaux = list(board.legal_moves)
-    capture = []
-    for coup in coups_legaux:
-        if board.is_capture(coup):
-            capture.append(coup)
-    if capture:
-        return random.choice(capture)
-    return random.choice(coups_legaux)
-
-def choisir_coup_aleatoire(board):
-    coups_legaux = list(board.legal_moves)
-    return random.choice(coups_legaux)
+from electriz import choisir_coup_aleatoire, choisir_coup_simple, choisir_coup_avec_evaluation
 
 def jouer_partie():
     board = chess.Board()
@@ -36,8 +23,9 @@ def jouer_partie():
                     break
         else:
             # Tour de l'ordinateur
-            #coup = choisir_coup_aleatoire(board)      #level 1
-            coup = choisir_coup_simple(board)         #level 2
+            #coup = choisir_coup_aleatoire(board)           #level 1
+            #coup = choisir_coup_simple(board)              #level 2
+            coup = choisir_coup_avec_evaluation(board)      #level 3
 
             print(f"\nOrdinateur joue : {coup}")
             board.push(coup)
