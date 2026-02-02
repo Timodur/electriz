@@ -2,7 +2,7 @@ import chess
 import random
 import chess.svg
 from IPython.display import SVG
-from electriz import choisir_coup_aleatoire, choisir_coup_simple, choisir_coup_avec_evaluation
+from src.engine.evaluation import Engine
 
 def jouer_partie():
     board = chess.Board()
@@ -25,7 +25,8 @@ def jouer_partie():
             # Tour de l'ordinateur
             #coup = choisir_coup_aleatoire(board)           #level 1
             #coup = choisir_coup_simple(board)              #level 2
-            coup = choisir_coup_avec_evaluation(board)      #level 3
+            engine = Engine()
+            coup = engine.choisir_coup_avec_evaluation(board)      #level 3
 
             print(f"\nOrdinateur joue : {coup}")
             board.push(coup)
