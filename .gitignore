@@ -63,16 +63,16 @@ env/
 data/raw/lichess_db_*.pgn.zst
 
 data/raw/*.pgn
-
+*.svg
 data/raw/*.pgn.zst 
 data/raw/*.binpack
 
 # Chess SPECIFIQUE
-data/processed/*.pt          # Datasets 100GB
-data/raw/*.pgn.zst           # Lichess massif
+data/processed/*.pt
+data/raw/*.pgn.zst          
 data/raw/*.binpack
 nets/*.pt *.weights *.nnue
-data/raw/Hikaru_all.pgn      # ← VOS fichiers (si gros)
+data/raw/Hikaru_all.pgn      
 data/raw/MagnusCarlsen_all.pgn
 data/raw/*.pgn            # Décommentez si petits
 Commandes
