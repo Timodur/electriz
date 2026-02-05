@@ -74,8 +74,7 @@ data/raw/*.binpack
 nets/*.pt *.weights *.nnue
 data/raw/Hikaru_all.pgn      
 data/raw/MagnusCarlsen_all.pgn
-data/raw/*.pgn            # Décommentez si petits
-Commandes
-
+data/raw/*.pgn
+*.pgn
 # gameplay
 *.svg

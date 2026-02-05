@@ -1,4 +1,5 @@
 import chess
+import chess.pgn
 import random
 import chess.svg
 import time
@@ -65,7 +66,7 @@ def jouer_partie():
     print(board.outcome())
     print(board.fullmove_number)
 
-    nom_pgn = sauvegarder_partie_pgn(board)
+    sauvegarder_partie_pgn(board)
 
 if __name__ == "__main__":
     jouer_partie()

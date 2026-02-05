@@ -185,7 +185,6 @@ class Engine:
                 if evaluation < meilleure_eval:
                     meilleure_eval = evaluation
                     meilleur_coup = coup1
-        print(f"Évaluation du coup {evaluation/100:.2f} ")
 
         return meilleur_coup
 
