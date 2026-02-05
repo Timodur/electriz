@@ -158,4 +158,65 @@ class Engine:
         
         print(f"Évaluation du coup {meilleure_eval/100:.2f} ")    
         return meilleur_coup
+    def choisir_coup_minimax(self, board, profondeur=3):
+        coups_legaux = list(board.legal_moves)
+        
+        if not coups_legaux:
+            return None
+        
+        # Initialise selon qui joue
+        meilleure_eval = float('-inf') if board.turn == chess.WHITE else float('inf')
+        meilleur_coup = coups_legaux[0]
+        couleur_initiale = board.turn 
+        
+        for coup1 in coups_legaux:
+            board.push(coup1)
+            
+            # Évalue la position après coup1 avec minimax profondeur 2
+            evaluation = self.minimax(board, profondeur - 1)
+            board.pop()
+            
+            # Maximise pour blancs, minimise pour noirs
+            if couleur_initiale == chess.WHITE:
+                if evaluation > meilleure_eval:
+                    meilleure_eval = evaluation
+                    meilleur_coup = coup1
+            else:
+                if evaluation < meilleure_eval:
+                    meilleure_eval = evaluation
+                    meilleur_coup = coup1
+        print(f"Évaluation du coup {evaluation/100:.2f} ")
+
+        return meilleur_coup
+
+    def minimax(self, board, profondeur):
+        if profondeur == 0 or board.is_game_over():
+            
+            return self.evaluer_position(board)
+        
+        coups_legaux = list(board.legal_moves)
+        
+        # Maximise pour les blancs
+        if board.turn == chess.WHITE:
+            max_eval = float('-inf')
+            for coup in coups_legaux:
+                board.push(coup)
+                evaluation = self.minimax(board, profondeur - 1)
+                board.pop()
+                max_eval = max(max_eval, evaluation)
+            return max_eval
+        
+        # Minimise pour les noirs
+        else:
+            min_eval = float('inf')
+            for coup in coups_legaux:
+                board.push(coup)
+                evaluation = self.minimax(board, profondeur - 1)
+                board.pop()
+                min_eval = min(min_eval, evaluation)
+            return min_eval
+
+
+        
+        
         
