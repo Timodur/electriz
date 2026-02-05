@@ -40,6 +40,7 @@ def choisir_coup_simple(board):
     return random.choice(coups_legaux)
 
 def choisir_coup_aleatoire(board):
+    """Choisit un coup aléatoire parmi les coups légaux"""
     coups_legaux = list(board.legal_moves)
     return random.choice(coups_legaux)
 
@@ -65,5 +66,6 @@ def jouer_partie():
     print(board.fullmove_number)
 
     nom_pgn = sauvegarder_partie_pgn(board)
+
 if __name__ == "__main__":
     jouer_partie()
