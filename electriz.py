@@ -1,5 +1,6 @@
 import chess
 import chess.pgn
+import chess.svg
 import random
 import os
 from datetime import datetime
@@ -32,17 +33,14 @@ def sauvegarder_partie_pgn(board, nom_fichier=None):
     print(f"Partie sauvegardée : {nom_fichier}")
 
 def choisir_coup_aleatoire(board):
-    """Niveau 1 : Coup aléatoire"""
     return random.choice(list(board.legal_moves))
 
 def choisir_coup_simple(board):
-    """Niveau 2 : Préfère les captures"""
     coups_legaux = list(board.legal_moves)
     captures = [coup for coup in coups_legaux if board.is_capture(coup)]
     return random.choice(captures) if captures else random.choice(coups_legaux)
 
 def jouer_tour_ia(board, level):
-    """Choisit le coup IA selon le niveau (fonction réutilisable)"""
     engine = Engine()
     match level:
         case 1:
@@ -62,16 +60,16 @@ def jouer_partie(level=4):
     
     while not board.is_game_over():
         coup = jouer_tour_ia(board, level)
-        print(f"IA (niveau {level}) joue : {coup}")
-        board.push(coup)
+        if coup is not None:
+            print(f"IA (niveau {level}) joue : {coup}")
+            board.push(coup)
     
     print(f"\nRésultat : {board.result()}")
     print(board.outcome())
     print(f"Nombre de coups complets : {board.fullmove_number}")
     sauvegarder_partie_pgn(board)
 
-def jouer_partie_human(level=4):
-    """Humain (blanc) vs IA (noir)"""
+def jouer_partie_human(level=4, color=chess.WHITE):
     board = chess.Board()
     
     while not board.is_game_over():
@@ -80,7 +78,7 @@ def jouer_partie_human(level=4):
         with open("echiquier.svg", "w", encoding="utf-8") as f:
             f.write(svg_data)
         
-        if board.turn == chess.WHITE:
+        if board.turn == color:
             # Tour humain
             while True:
                 legal_moves = [board.san(m) for m in board.legal_moves]
@@ -99,8 +97,9 @@ def jouer_partie_human(level=4):
         else:
             # Tour IA
             coup = jouer_tour_ia(board, level)
-            print(f"\nOrdinateur joue : {board.san(coup)}")
-            board.push(coup)
+            if coup is not None:
+                print(f"\nOrdinateur joue : {board.san(coup)}")
+                board.push(coup)
     
     print(f"\nRésultat : {board.result()}")
     print(board.outcome())
@@ -111,6 +110,8 @@ if __name__ == "__main__":
     level = int(input("Niveau IA (1-4) [4] : ").strip() or "4")
     
     if mode == "2":
-        jouer_partie_human(level)
+        color = input("Couleur (1=blanc, 2=noir) [1] : ").strip() or "1"
+        color = chess.WHITE if color == "1" else chess.BLACK
+        jouer_partie_human(level, color)
     else:
         jouer_partie(level)
