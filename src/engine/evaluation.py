@@ -1,45 +1,136 @@
-from turtle import color
 import chess
 import random
 
 class Engine:
     VALEURS_PIECES = {
-        chess.PAWN: 100,
+        chess.PAWN:   100,
         chess.KNIGHT: 300,
         chess.BISHOP: 300,
-        chess.ROOK: 500,
-        chess.QUEEN: 900,
-        chess.KING: 0
+        chess.ROOK:   500,
+        chess.QUEEN:  900,
+        chess.KING:   200000
     }
-    CENTER_BONUS = {
-        # Bonus selon la distance au centre (e4, d4, e5, d5)
-        chess.E4: 30, chess.D4: 30, chess.E5: 30, chess.D5: 30,  # Centre parfait
-        chess.C4: 20, chess.C5: 20, chess.D3: 20, chess.E3: 20,  # Centre étendu
-        chess.F4: 20, chess.F5: 20, chess.D6: 20, chess.E6: 20,
-        chess.C3: 10, chess.C6: 10, chess.F3: 10, chess.F6: 10   # Proche du centre
-    }
+    # TODO : improve table -> https://www.chessprogramming.org/PeSTO%27s_Evaluation_Function
+    _PAWN_TABLE = [
+         0,   0,   0,   0,   0,   0,   0,   0,
+         5,  10,  10, -20, -20,  10,  10,   5,
+         5,  -5, -10,   0,   0, -10,  -5,   5,
+         0,   0,   0,  20,  20,   0,   0,   0,
+         5,   5,  10,  25,  25,  10,   5,   5,
+        10,  10,  20,  30,  30,  20,  10,  10,
+        50,  50,  50,  50,  50,  50,  50,  50,
+         0,   0,   0,   0,   0,   0,   0,   0,
+    ]
+    _KNIGHT_TABLE = [
+       -50, -40, -30, -30, -30, -30, -40, -50,
+       -40, -20,   0,   5,   5,   0, -20, -40,
+       -30,   5,  10,  15,  15,  10,   5, -30,
+       -30,   0,  15,  20,  20,  15,   0, -30,
+       -30,   5,  15,  20,  20,  15,   5, -30,
+       -30,   0,  10,  15,  15,  10,   0, -30,
+       -40, -20,   0,   0,   0,   0, -20, -40,
+       -50, -40, -30, -30, -30, -30, -40, -50,
+    ]
+    _BISHOP_TABLE = [
+       -20, -10, -10, -10, -10, -10, -10, -20,
+       -10,   5,   0,   0,   0,   0,   5, -10,
+       -10,  10,  10,  10,  10,  10,  10, -10,
+       -10,   0,  10,  10,  10,  10,   0, -10,
+       -10,   5,   5,  10,  10,   5,   5, -10,
+       -10,   0,   5,  10,  10,   5,   0, -10,
+       -10,   0,   0,   0,   0,   0,   0, -10,
+       -20, -10, -10, -10, -10, -10, -10, -20,
+    ]
+    _ROOK_TABLE = [
+         0,   0,   0,   5,   5,   0,   0,   0,
+        -5,   0,   0,   0,   0,   0,   0,  -5,
+        -5,   0,   0,   0,   0,   0,   0,  -5,
+        -5,   0,   0,   0,   0,   0,   0,  -5,
+        -5,   0,   0,   0,   0,   0,   0,  -5,
+        -5,   0,   0,   0,   0,   0,   0,  -5,
+         5,  10,  10,  10,  10,  10,  10,   5,
+         0,   0,   0,   0,   0,   0,   0,   0,
+    ]
+    _QUEEN_TABLE = [
+       -20, -10, -10,  -5,  -5, -10, -10, -20,
+       -10,   0,   5,   0,   0,   0,   0, -10,
+       -10,   5,   5,   5,   5,   5,   0, -10,
+         0,   0,   5,   5,   5,   5,   0,  -5,
+        -5,   0,   5,   5,   5,   5,   0,  -5,
+       -10,   0,   5,   5,   5,   5,   0, -10,
+       -10,   0,   0,   0,   0,   0,   0, -10,
+       -20, -10, -10,  -5,  -5, -10, -10, -20,
+    ]
+    _KING_MIDDLEGAME_TABLE = [
+        -30, -40, -40, -50, -50, -40, -40, -30,
+        -30, -40, -40, -50, -50, -40, -40, -30,
+        -30, -40, -40, -50, -50, -40, -40, -30,
+        -30, -40, -40, -50, -50, -40, -40, -30,
+        -20, -30, -30, -40, -40, -30, -30, -20,
+        -10, -20, -20, -20, -20, -20, -20, -10,
+         20,  20,   0,   0,   0,   0,  20,  20,
+         20,  30,  10,   0,   0,  10,  30,  20
+    ]
+    _KING_ENDGAME_TABLE = [
+        -50, -40, -30, -20, -20, -30, -40, -50,
+        -30, -20, -10,   0,   0, -10, -20, -30,
+        -30, -10,  20,  30,  30,  20, -10, -30,
+        -30, -10,  30,  40,  40,  30, -10, -30,
+        -30, -10,  30,  40,  40,  30, -10, -30,
+        -30, -10,  20,  30,  30,  20, -10, -30,
+        -30, -30,   0,   0,   0,   0, -30, -30,
+        -50, -30, -30, -30, -30, -30, -30, -50
+    ]
+    #TODO : king safety (short)-> https://www.chessprogramming.org/King_Safety#PawnShield
+    #TODO : pawn structure (long) -> https://www.chessprogramming.org/Pawn_Structure
+    #TODO : and more... (long) -> https://www.chessprogramming.org/Evaluation
+    @staticmethod
+    def _mirror(table):
+        return sum([table[i:i+8] for i in range(0, 64, 8)][::-1], [])
+
+    @staticmethod
+    def _make_bonus(table):
+        return dict(zip(chess.SQUARES, table))
+
+    def __init__(self):
+        self.WHITE_PAWN_BONUS   = self._make_bonus(self._PAWN_TABLE)
+        self.WHITE_KNIGHT_BONUS = self._make_bonus(self._KNIGHT_TABLE)
+        self.WHITE_BISHOP_BONUS = self._make_bonus(self._BISHOP_TABLE)
+        self.WHITE_ROOK_BONUS   = self._make_bonus(self._ROOK_TABLE)
+        self.WHITE_QUEEN_BONUS  = self._make_bonus(self._QUEEN_TABLE)
+        self.WHITE_KING_BONUS   = self._make_bonus(self._KING_MIDDLEGAME_TABLE)
+
+        self.BLACK_PAWN_BONUS   = self._make_bonus(self._mirror(self._PAWN_TABLE))
+        self.BLACK_KNIGHT_BONUS = self._make_bonus(self._mirror(self._KNIGHT_TABLE))
+        self.BLACK_BISHOP_BONUS = self._make_bonus(self._mirror(self._BISHOP_TABLE))
+        self.BLACK_ROOK_BONUS   = self._make_bonus(self._mirror(self._ROOK_TABLE))
+        self.BLACK_QUEEN_BONUS  = self._make_bonus(self._mirror(self._QUEEN_TABLE))
+        self.BLACK_KING_BONUS   = self._make_bonus(self._mirror(self._KING_MIDDLEGAME_TABLE))
+        
+        self.WHITE_PIECE_BONUS = {
+            chess.PAWN: self.WHITE_PAWN_BONUS,
+            chess.KNIGHT: self.WHITE_KNIGHT_BONUS,
+            chess.BISHOP: self.WHITE_BISHOP_BONUS,
+            chess.ROOK: self.WHITE_ROOK_BONUS,
+            chess.QUEEN: self.WHITE_QUEEN_BONUS,
+            chess.KING: self.WHITE_KING_BONUS,
+        }
+        
+        self.BLACK_PIECE_BONUS = {
+            chess.PAWN: self.BLACK_PAWN_BONUS,
+            chess.KNIGHT: self.BLACK_KNIGHT_BONUS,
+            chess.BISHOP: self.BLACK_BISHOP_BONUS,
+            chess.ROOK: self.BLACK_ROOK_BONUS,
+            chess.QUEEN: self.BLACK_QUEEN_BONUS,
+            chess.KING: self.BLACK_KING_BONUS,
+        }
+    
     def evaluer_position(self, board):
-        if board.is_checkmate():
-            return -float('inf') if board.turn == chess.WHITE else float('inf')
-        
-        if board.is_stalemate() or board.is_insufficient_material() or board.can_claim_fifty_moves() or board.can_claim_threefold_repetition():
-            return 0
-        
         score = 0
 
         score += self.evaluate_material_balance(board)
 
-        score += self.evaluate_mobility(board)
-
-        score += self.evaluate_center_control(board)
-
-        score += self.evaluate_development(board)
-
-        score += self.evaluate_attacked_pieces(board)
-
-        score += self.evaluate_king_safety(board)
-
-                
+        score += self.evaluate_piece_position(board)
         return score
     def evaluate_material_balance(self, board):
         score = 0
@@ -49,94 +140,27 @@ class Engine:
             score += self.VALEURS_PIECES[piece_type] * pieces_blanches - self.VALEURS_PIECES[piece_type] * pieces_noires
         return score
     
+    def evaluate_piece_position(self, board):
+        score = 0
+        for piece_type in self.VALEURS_PIECES:
+            for square in board.pieces(piece_type, chess.WHITE):
+                score += self.WHITE_PIECE_BONUS[piece_type][square]
+            for square in board.pieces(piece_type, chess.BLACK):
+                score -= self.BLACK_PIECE_BONUS[piece_type][square]
+        return score
+    
     def evaluate_mobility(self, board):
+        #TODO : improve mobility evaluation
         mobilite = board.legal_moves.count()
         score = mobilite * 10 if board.turn == chess.WHITE else -mobilite * 10
         return score
     
-    def evaluate_center_control(self, board):
-        white_center = 0
-        black_center = 0
-        for square in self.CENTER_BONUS:
-            if board.piece_at(square) and board.color_at(square) == chess.WHITE:
-                white_center += self.CENTER_BONUS[square]
-            if board.piece_at(square) and board.color_at(square) == chess.BLACK:
-                black_center += self.CENTER_BONUS[square]
 
-        return white_center - black_center
-    def evaluate_development(self, board):
-
-        initial_positions = {
-            chess.WHITE: {
-                chess.BISHOP: {chess.C1, chess.F1},
-                chess.KNIGHT: {chess.B1, chess.G1}
-            },
-            chess.BLACK: {
-                chess.BISHOP: {chess.C8, chess.F8},
-                chess.KNIGHT: {chess.B8, chess.G8}
-            }
-        }
-        
-        def count_undeveloped(color):
-            return sum(
-                len(board.pieces(piece_type, color) & initial_squares)
-                for piece_type, initial_squares in initial_positions[color].items()
-            )
-        
-        # Pénalité pour les pièces non développées
-        white_undeveloped = count_undeveloped(chess.WHITE)
-        black_undeveloped = count_undeveloped(chess.BLACK)
-        
-        return (black_undeveloped - white_undeveloped) * 20
     
-    def evaluate_attacked_pieces(self, board):
-
-        score = 0
-        
-        # Parcourir toutes les pièces (sauf le roi)
-        for piece_type, valeur in self.VALEURS_PIECES.items():
-            if piece_type == chess.KING:
-                continue  
-            
-            penalite_base = valeur * 0.3
-            
-
-            for color, sign in [(chess.WHITE, -1), (chess.BLACK, 1)]:
-                opponent = not color
-                
-                for square in board.pieces(piece_type, color):
-                    if board.is_attacked_by(opponent, square):
-                        if board.is_attacked_by(color, square):
-                            penalite = penalite_base
-                        else:
-                            penalite = penalite_base * 2
-                        
-                        score += sign * penalite
-        
-        return score
+    
     def evaluate_king_safety(self, board):
-        white_safety = 0
-        black_safety = 0
-        
-        # Vérifier la position du roi blanc
-        white_king_square = board.king(chess.WHITE)
-        if white_king_square:
-            col = chess.square_file(white_king_square)
-            if col in [0, 1, 6, 7]:
-                white_safety += 50
-            elif col in [3, 4]:
-                white_safety -= 40
-        
-        # Vérifier la position du roi noir
-        black_king_square = board.king(chess.BLACK)
-        if black_king_square:
-            case = chess.square_file(black_king_square)
-            if case in [0, 1, 6, 7]:
-                black_safety += 50
-            elif case in [3, 4]:
-                black_safety -= 40
-        
-        return white_safety - black_safety
+        # TODO : implement king safety evaluation
+        return 0
         
     def choisir_coup_avec_evaluation(self, board):
         coups_legaux = list(board.legal_moves)
