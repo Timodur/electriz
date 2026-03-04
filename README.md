@@ -22,7 +22,7 @@ python electriz.py
 
 ## Project Structure
 
-```
+```shell
 electriz/
 ├── data/          # Data files
 ├── src/           # Source code
