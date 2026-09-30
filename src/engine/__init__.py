@@ -1,1 +1,1 @@
-# Éval rapide NNUE (forward <1ms)
+# Moteur classique : évaluation statique + recherche alpha-bêta

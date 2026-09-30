@@ -1,0 +1,5 @@
+# Le paquet PyPI de python-chess s'appelle « chess » : https://python-chess.readthedocs.io/
+chess>=1.10
+zstandard>=0.22   # lecture des bases Lichess .pgn.zst (src/parser.py)
+requests>=2.31    # API Chess.com (src/downloader.py)
+pytest>=8         # tests
