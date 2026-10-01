@@ -35,8 +35,8 @@ pip install -r requirements.txt
 ## Utilisation
 
 ```bash
-python -m electriz                                   # jouer (IA vs IA ou humain vs IA)
-python -m pytest                                     # tests
+python -m src             # jouer (IA vs IA ou humain vs IA)
+python -m pytest       # tests
 python -m electriz.datasets.downloader MagnusCarlsen --contact moi@example.com
 python -m electriz.datasets.parser data/raw/MagnusCarlsen_all.pgn --max-games 100
 ```
@@ -45,26 +45,28 @@ python -m electriz.datasets.parser data/raw/MagnusCarlsen_all.pgn --max-games 10
 
 ```text
 electriz/
-├── electriz/                  # paquet Python
-│   ├── __main__.py            # point d'entrée : python -m electriz
-│   ├── jeu.py                 # parties en console, sauvegarde PGN
+├── src/
+│   ├── __main__.py            
+│   ├── jeu.py            # parties en console, sauvegarde PGN
 │   ├── engine/
-│   │   ├── evaluation.py      # évaluation statique (matériel + tables pièce-case)
-│   │   ├── search.py          # recherche minimax / alpha-bêta (classe Engine)
-│   │   ├── arena.py           # (à faire) matchs contre Stockfish
-│   │   └── selfplay.py        # (à faire) parties contre soi-même
+│   │   ├── evaluation.py      
+│   │   ├── search.py          
+│   │   ├── arena.py           
+│   │   └── selfplay.py        
 │   ├── datasets/
-│   │   ├── downloader.py      # API Chess.com -> data/raw/*.pgn
-│   │   └── parser.py          # PGN / PGN.zst -> positions FEN
-│   ├── uci/loop.py            # (à faire) protocole UCI
-│   ├── nnue/                  # (à faire) réseau d'évaluation : model, eval, train
-│   └── tools/bench.py         # (à faire) benchmark nœuds/s
-├── tests/engine/              # pytest : test_evaluation.py, test_search.py
+│   │   ├── downloader.py # API Chess.com -> data/raw/*.pgn
+│   │   └── parser.py     # PGN / PGN.zst -> positions FEN
+│   ├── uci/loop.py
+│   ├── nnue/d'évaluation : model, eval, train
+│   └── tools/bench.py 
+├── tests/engine/              
 ├── assets/
-│   ├── logo.svg               # logo principal (glitch, damier 4×4)
-│   ├── logo-2x2.svg           # variante 2×2 (glitch)
-│   └── sources/               # logos sans glitch, damiers et éclairs
-└── data/                      # non versionné
+│   ├── logo.svg               
+│   ├── logo-2x2.svg           
+│   └── sources/              
+└── data/
+    ├── raw/               # parties téléchargées
+    └── processed/         # positions FEN
 ```
 
 ## Licence
