@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/logo.svg" width="180" alt="Logo Electriz"></p>
+
 # electriz
 
 Moteur d'échecs en Python, basé sur la bibliothèque [python-chess](https://python-chess.readthedocs.io/).
@@ -33,26 +35,36 @@ pip install -r requirements.txt
 ## Utilisation
 
 ```bash
-python electriz.py                                   # jouer
+python -m electriz                                   # jouer (IA vs IA ou humain vs IA)
 python -m pytest                                     # tests
-python -m src.downloader MagnusCarlsen --contact moi@example.com
-python -m src.parser data/raw/MagnusCarlsen_all.pgn --max-games 100
+python -m electriz.datasets.downloader MagnusCarlsen --contact moi@example.com
+python -m electriz.datasets.parser data/raw/MagnusCarlsen_all.pgn --max-games 100
 ```
 
 ## Structure
 
 ```text
 electriz/
-├── electriz.py            # point d'entrée (jeu en console)
-├── src/
-│   ├── engine/evaluation.py   # évaluation + recherche alpha-bêta
-│   ├── downloader.py          # API Chess.com -> data/raw/*.pgn
-│   ├── parser.py              # PGN / PGN.zst -> positions FEN
-│   ├── uci/                   # (à faire) protocole UCI
-│   ├── nnue/, train.py        # (à faire) réseau d'évaluation
+├── electriz/                  # paquet Python
+│   ├── __main__.py            # point d'entrée : python -m electriz
+│   ├── jeu.py                 # parties en console, sauvegarde PGN
+│   ├── engine/
+│   │   ├── evaluation.py      # évaluation statique (matériel + tables pièce-case)
+│   │   ├── search.py          # recherche minimax / alpha-bêta (classe Engine)
+│   │   ├── arena.py           # (à faire) matchs contre Stockfish
+│   │   └── selfplay.py        # (à faire) parties contre soi-même
+│   ├── datasets/
+│   │   ├── downloader.py      # API Chess.com -> data/raw/*.pgn
+│   │   └── parser.py          # PGN / PGN.zst -> positions FEN
+│   ├── uci/loop.py            # (à faire) protocole UCI
+│   ├── nnue/                  # (à faire) réseau d'évaluation : model, eval, train
 │   └── tools/bench.py         # (à faire) benchmark nœuds/s
-├── tests/                 # pytest
-└── data/                  # non versionné
+├── tests/engine/              # pytest : test_evaluation.py, test_search.py
+├── assets/
+│   ├── logo.svg               # logo principal (glitch, damier 4×4)
+│   ├── logo-2x2.svg           # variante 2×2 (glitch)
+│   └── sources/               # logos sans glitch, damiers et éclairs
+└── data/                      # non versionné
 ```
 
 ## Licence

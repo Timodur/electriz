@@ -7,7 +7,7 @@ Doc : https://support.chess.com/en/articles/9650547-published-data-api
 - Chess.com demande un User-Agent qui identifie l'outil avec un contact.
 
 Usage :
-    python -m src.downloader MagnusCarlsen --contact moi@example.com
+    python -m electriz.datasets.downloader MagnusCarlsen --contact moi@example.com
     (ou variable d'environnement ELECTRIZ_CONTACT)
 """
 

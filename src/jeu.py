@@ -1,4 +1,4 @@
-"""Point d'entrée d'Electriz : IA contre IA, ou humain contre IA, en console."""
+"""Parties en console : IA contre IA, ou humain contre IA. Lancement : python -m electriz"""
 
 import os
 import random
@@ -8,7 +8,7 @@ import chess
 import chess.pgn
 import chess.svg
 
-from src.engine.evaluation import Engine
+from src.engine import Engine
 
 DOSSIER_PARTIES = "data/raw/parties"
 FICHIER_SVG = "echiquier.svg"
@@ -135,7 +135,7 @@ def demander_entier(question, choix, defaut):
         print(f"Choix possibles : {', '.join(map(str, choix))}")
 
 
-if __name__ == "__main__":
+def main():
     mode = demander_entier("Mode (1=IA vs IA, 2=Humain vs IA)", (1, 2), 1)
     for n, desc in NIVEAUX.items():
         print(f"  {n} : {desc}")
@@ -146,3 +146,7 @@ if __name__ == "__main__":
         jouer_partie_human(level, chess.WHITE if couleur == 1 else chess.BLACK)
     else:
         jouer_partie(level)
+
+
+if __name__ == "__main__":
+    main()
