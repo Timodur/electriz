@@ -2,7 +2,7 @@ import chess
 import pytest
 from positions import POSITIONS
 
-from src.engine import MATE_SCORE
+from electriz.engine import MATE_SCORE
 
 BERGER = "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4"
 

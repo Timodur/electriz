@@ -35,46 +35,47 @@ pip install -r requirements.txt
 ## Utilisation
 
 ```bash
-python -m src          # jouer (IA vs IA ou humain vs IA)
+python -m electriz     # jouer (IA vs IA ou humain vs IA)
 python -m pytest       # tests
-python -m src.datasets.downloader MagnusCarlsen --contact moi@example.com
-python -m src.datasets.parser data/raw/MagnusCarlsen_all.pgn --max-games 100
+python -m electriz.tools.bench --depth 4   # benchmark (noeuds/s)
+python -m electriz.datasets.downloader MagnusCarlsen --contact moi@example.com
+python -m electriz.datasets.parser data/raw/MagnusCarlsen_all.pgn --max-games 100
 ```
 
 ## Structure
 
 ```text
-electriz/
-├── src/
-│   ├── __main__.py            
-│   ├── jeu.py            # parties en console, sauvegarde PGN
+.
+├── electriz/                 # paquet Python (python -m electriz)
+│   ├── __main__.py
+│   ├── jeu.py                # parties en console, sauvegarde PGN
 │   ├── engine/
-│   │   ├── evaluation.py      
-│   │   ├── search.py          
-│   │   ├── arena.py           
-│   │   └── selfplay.py        
+│   │   ├── evaluation.py
+│   │   ├── search.py
+│   │   ├── arena.py
+│   │   └── selfplay.py
 │   ├── datasets/
-│   │   ├── downloader.py # API Chess.com -> data/raw/*.pgn
-│   │   └── parser.py     # PGN / PGN.zst -> positions FEN
+│   │   ├── downloader.py     # API Chess.com -> data/raw/*.pgn
+│   │   └── parser.py         # PGN / PGN.zst -> positions FEN
 │   ├── uci/loop.py
 │   ├── nnue/
 │   │   ├── model.py
 │   │   ├── eval.py
 │   │   └── train.py
-│   └── tools/bench.py 
+│   └── tools/bench.py
 ├── tests/
 │   └── engine/
-│       ├── evaluation.py
-│       ├── search.py
-│       ├── arena.py
-│       └── selfplay.py
+│       ├── conftest.py
+│       ├── positions.py
+│       ├── test_evaluation.py
+│       └── test_search.py
 ├── assets/
-│   ├── logo.svg               
-│   ├── logo-2x2.svg           
-│   └── sources/              
+│   ├── logo.svg
+│   ├── logo-2x2.svg
+│   └── sources/
 └── data/
-    ├── raw/               # parties téléchargées
-    └── processed/         # positions FEN
+    ├── raw/                  # parties téléchargées
+    └── processed/            # positions FEN
 ```
 
 ## Licence

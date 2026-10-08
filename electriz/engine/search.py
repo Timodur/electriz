@@ -124,7 +124,7 @@ class Engine(Evaluation):
                 beta = min(beta, score)
         return meilleur_coup, meilleur_score
 
-    # API utilisée par electriz.py (niveaux 3 et 4)
+    # API utilisée par electriz/jeu.py (niveaux 3 et 4)
     def choisir_coup_avec_evaluation(self, board):
         """Niveau 3 : meilleur coup à 1 demi-coup (détecte les mats en 1)."""
         return self.chercher(board, profondeur=1)[0]

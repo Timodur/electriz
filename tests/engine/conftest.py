@@ -1,6 +1,6 @@
 import pytest
 
-from src.engine import Engine
+from electriz.engine import Engine
 
 
 @pytest.fixture

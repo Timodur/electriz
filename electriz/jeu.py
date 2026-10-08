@@ -8,7 +8,7 @@ import chess
 import chess.pgn
 import chess.svg
 
-from src.engine import Engine
+from electriz.engine import Engine
 
 DOSSIER_PARTIES = "data/raw/parties"
 FICHIER_SVG = "echiquier.svg"

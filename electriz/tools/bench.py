@@ -1,11 +1,11 @@
 #Test de performance standard UCI pour mesurer vitesse moteur (nodes/sec)
-"""Benchmark du moteur : python -m src.tools.bench --depth 4"""
+"""Benchmark du moteur : python -m electriz.tools.bench --depth 4"""
 import argparse
 import time
 
 import chess
 
-from src.engine import Engine
+from electriz.engine import Engine
 
 # Toujours les mêmes positions, pour pouvoir comparer d'une version à l'autre
 POSITIONS = [
