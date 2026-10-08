@@ -8,6 +8,8 @@ Sources :
 Les Blancs maximisent le score, les Noirs le minimisent.
 """
 
+import time
+
 import chess
 
 from .evaluation import Evaluation
@@ -18,9 +20,14 @@ MATE_SCORE = 100_000
 INFINI = float("inf")
 
 
+class TempsEcoule(Exception):
+    """Levée quand l'échéance de la recherche est dépassée."""
+
+
 class Engine(Evaluation):
     def __init__(self):
         self.noeuds = 0  # positions visitées lors de la dernière recherche
+        self.echeance = None  # instant (time.perf_counter) où abandonner, ou None
 
     # ------------------------------------------------------------------
     # Positions terminales
@@ -77,6 +84,8 @@ class Engine(Evaluation):
     def alphabeta(self, board, profondeur, alpha=-INFINI, beta=INFINI, ply=0):
         """Minimax avec élagage alpha-bêta : même résultat, beaucoup moins de nœuds."""
         self.noeuds += 1
+        if self.echeance is not None and self.noeuds % 512 == 0 and time.perf_counter() > self.echeance:
+            raise TempsEcoule
         terminal = self._score_terminal(board, ply)
         if terminal is not None:
             return terminal
